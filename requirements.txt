@@ -1,0 +1,7 @@
+numpy
+matplotlib
+pyvisa
+pyvisa-py
+tqdm
+zeroconf # get rid of pyvisa warnings or connect to internet instruments
+psutil # get rid of pyvisa warnings or connect to internet instruments
