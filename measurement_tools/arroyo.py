@@ -10,31 +10,35 @@ TODO:
 No sort of control/handling of temperature limits/TEC settings.
 This has only been tested with the bare die lasers. The settings
 need to be preset to not turn off laser if e.g. TEC is off.
-"""
-import pyvisa
-from pyvisa import constants
 
+TODO:
+Consider refactoring so that gettable and settable things
+are properties rather than methods.
+"""
 from datetime import datetime, timedelta
 import time
 import threading
 import atexit
 import sys
 
-import interact
+import pyvisa
+from pyvisa import constants
+
+from measurement_tools import interact
 
 
 class LaserDriver:
-    def __init__(self, rm, I_max=None, Vf_max=None, name=None):
+    def __init__(self, rm, Io_max=None, Vf_max=None, name=None):
         """
         Prompts interactively if name is not provided.
-        I_max: maximum forward current in mA
+        Io_max: maximum forward current in mA
         Vf_max: maximum forward voltage in Volts.
         """
         self.rm = rm
         self.idn = None
         if name is None:
             print('Connecting to Laser Driver:')
-            name = interact.get_pyvisa_instr_ID(rm)
+            name = interact.get_pyvisa_instr_ID(rm, mytype='LaserDriver')
         self.name = name
         self.instr = self.rm.open_resource(self.name)
         self.instr.baud_rate = 38400
@@ -58,8 +62,8 @@ class LaserDriver:
                                          daemon=True)
         self.watchdog.start()
         atexit.register(self.close)
-        if I_max is not None:
-            self.set_current_limit(I_max)
+        if Io_max is not None:
+            self.set_current_limit(Io_max)
         if Vf_max is not None:
             self.set_voltage_limit(Vf_max)
 
@@ -102,7 +106,7 @@ class LaserDriver:
         '''
         with self.instr_lock:
             I_max = self.query_reg('LASER:LIMIT:LDI?')
-        assert mA < I_max
+        assert mA <= I_max
         with self.instr_lock:
             self.instr.write("LASER:LDI " + str(mA))
 
@@ -150,7 +154,9 @@ class LaserDriver:
             7: 'Open Circuit',
             8: 'Output Shorted'
         }
-
+        with self.instr_lock:
+            # clear error register (e.g. from prev. run)
+            self.query_reg('LASER:EVENT?')
         while True:  # self._run_watchdog.is_set():
             time.sleep(1)
             with self.instr_lock:
@@ -198,12 +204,3 @@ class LaserDriver:
         except pyvisa.errors.InvalidSession:
             raise Exception(
                 'PyVISA session closed before Laser Driver could be closed.')
-
-
-if __name__ == "__main__":
-    if not sys.flags.interactive:
-        print("Run this file interactively with `python3 -i arroyo.py`")
-        quit()
-    rm = pyvisa.ResourceManager()
-    i = LaserDriver(rm, I_max=22, Vf_max=3.2)
-    print('Instantiated LaserDriver object \'i\'')

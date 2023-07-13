@@ -1,0 +1,6 @@
+*.org
+requirements.txt
+**/__pycache__/
+build/
+repos/
+*.egg-info/

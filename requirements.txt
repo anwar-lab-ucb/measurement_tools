@@ -1,7 +1,12 @@
-numpy
-matplotlib
-pyvisa
-pyvisa-py
-tqdm
-zeroconf # get rid of pyvisa warnings or connect to internet instruments
-psutil # get rid of pyvisa warnings or connect to internet instruments
+# There should be no need to use this, use 'pip install -e <root dir>' instead!!
+# numpy
+# pandas
+# matplotlib
+# pyvisa
+# pyvisa-py
+# tqdm
+# zeroconf # get rid of pyvisa warnings or connect to internet instruments
+# psutil # get rid of pyvisa warnings or connect to internet instruments
+# ThorlabsPM100 # 1.2.2
+# openpyxl # to work with xlsx (pandas)
+# pymeasure # for Agilent 33500B
