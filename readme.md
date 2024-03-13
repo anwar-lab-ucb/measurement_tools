@@ -77,15 +77,4 @@ Note that these scripts create a `.measurement_tools` file in your working direc
 <a id="orgaed31b0"></a>
 
 ## TODO Tektronix 3 Series
-
--   Rohan coded a API too ([here](https://github.com/rohanku/tekscope/tree/master/tekscope)) for ethernet connection. but it is not pyVISA integrated. TODO integrate with PyVISA.
--   [consider this](https://pypi.org/project/PyTektronixScope/). Uses pyVISA. Update: super out of date and spaghetti code.
-    -   Connection works via USB.
-    -   getting PyVISA to work with Ethernet connection (spotty for me, is something wrong?):
-        -   If plugging into your computer, there will be no router. You have to set up a very simple network manually. 
-            -   Find an unused [subnet](https://www.cloudflare.com/learning/network-layer/what-is-a-subnet/) in a private range, (e.g. 10.0.0.0/8 is a private range, but on 2023-06-28 in Cory 490D, my WIFI network used the subnet 10.142.52.0/22). I used 10.10.0.0/24.
-            -   Under Utility -> I/O settings on the Tek MDO34, set the IP address to something in the subnet: e.g. I used 10.10.0.2. Set the subnet mask to 255.255.255.0. Don't add a gateway.
-            -   Configure the ethernet adapter you plug into your computer.
-                -   on linux, try `watch ip a` and plug your adapter in and out to see what interface it is. Configure that wired connection with another ip in the range: 10.10.0.1/24. Don't add a gateway.
-            -   pyVISA autodiscovery works for me.
-
+-   Rohan coded a API too ([here](https://github.com/anwar-lab-ucb/tekscope)) for ethernet connection. Consider integration with PyVISA.
