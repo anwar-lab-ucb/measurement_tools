@@ -1,4 +1,3 @@
-
 # Table of Contents
 
 1.  [Install and Setup](#orgcfb76da)
@@ -22,6 +21,20 @@
     -   on Debian-based Linux, I needed to install `libusb-dev` apt package to communicate with PM100D. I also had to configure udev rules to give myself access to `/dev/usbtmc0`.
     -   On M1 Mac, I needed to run `brew install libusb`. To get my `pyvisa-info` to be happy when using conda-installed python, I also had to add this symlink: `ln -s /opt/homebrew/lib/libusb-1.0.0.dylib /usr/local/lib/libusb.dylib`. Weird. [see issue.](https://github.com/pyusb/pyusb/issues/355#issuecomment-974726078) The thread also suggests an alternative fix: `export DYLD_LIBRARY_PATH=/opt/homebrew/lib`.
 
+# Quickstart: Connecting to an instrument
+
+This package aims to provide a centralized location (to collect dependencies) and basic wrapper to easily connect to Anwar Lab Instruments with a semi-standardized interface. Other packages do the heavy lifting of defining python interfaces to individual instruments, other than for the Arroyo laser driver.
+
+For instruments whose interfaces are defined outside of this package, as is the case with the optical power meter, the main benefit this package provides other than simplified dependency management is some helper code to identify (and remember) the VISA addresses of the instruments.
+Below is an example of connecting to an instrument:
+
+```
+import pyvisa
+from measurement_tools import OpticalPowerMeter
+rm = pyvisa.ResourceManager()
+a = OpticalPowerMeter(rm)
+help(a)
+```
 
 <a id="orgacfb41d"></a>
 
@@ -61,8 +74,7 @@ Note that these scripts create a `.measurement_tools` file in your working direc
 
 ## ThorLabs PM100D
 
--   API provided by a [pip package](https://pypi.org/project/ThorlabsPM100/). See `scripts/laser-PIV.py` for example usage.
-
+-   API provided by an external package, [ThorlabsPM100](https://pypi.org/project/ThorlabsPM100/). See `scripts/laser-PIV.py` for example usage. [Documentation](https://pythonhosted.org/ThorlabsPM100/thorlabsPM100.html)
 
 <a id="orgdbeb185"></a>
 
