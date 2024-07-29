@@ -14,7 +14,8 @@ setup(
              'scripts/laser-control.py',
              'scripts/pyvisa-list.py',
              'scripts/agilent33500b-control.py',
-             'scripts/tek-control.py'],
+             'scripts/tek-control.py',
+             'scripts/tek-plot.py'],
     install_requires=[
         'numpy',
         'pandas',
@@ -27,7 +28,7 @@ setup(
         'ThorlabsPM100',
         'openpyxl',
         'pyusb',
-        'pymeasure @ git+https://github.com/pymeasure/pymeasure.git#de55c6e26b1cb9f10636ca3cd6f30fc52658e65e',
-        'PyTektronixScope @ git+https://github.com/AlecVercruysse/PyTektronixScope.git'
+        'pymeasure @ git+https://github.com/AlecVercruysse/pymeasure.git',
+        'tekscope @ git+https://github.com/anwar-lab-ucb/tekscope.git'
     ]
 )

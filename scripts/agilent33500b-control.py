@@ -9,7 +9,7 @@ from measurement_tools import interact, Agilent33500BFnGen
 def main(args):
     rm = pyvisa.ResourceManager()
     i = Agilent33500BFnGen(rm)
-    ch = i.ch[args.channel]
+    ch = i.channels[args.channel]
     if args.enable and args.disable:
         raise ValueError('Cannot both disable and enable the channel at once.')
     if args.shape:
