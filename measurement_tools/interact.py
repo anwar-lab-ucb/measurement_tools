@@ -6,11 +6,6 @@ import json
 import os
 import pprint
 
-import readline
-import rlcompleter
-import code
-import inspect
-
 
 def confirm(question, default=True):
     """
@@ -136,31 +131,3 @@ def option_list(options, prompt='Choose an option:', default=None):
         print(f'Invalid answer: {reply}. ' +
               f'Choose a value from 0-{len(options)-1}.')
         return option_list(options, prompt=prompt, default=default)
-
-
-def start_interpreter(helptext=None):
-    """
-    Start an interpreter (e.g. code.interact()) but with
-    tab completion!
-
-    Found this bad boy in the most random place:
-    https://news.ycombinator.com/item?id=22196307
-    """
-    history = os.path.join(os.path.expanduser('~'), '.python_history')
-    if os.path.isfile(history):
-        readline.read_history_file(history)
-
-    frame = inspect.currentframe().f_back
-    namespace = frame.f_locals.copy()
-    namespace.update(frame.f_globals)
-
-    readline.set_completer(rlcompleter.Completer(namespace).complete)
-    readline.parse_and_bind("tab: complete")
-
-    banner = "Entering interactive mode (Ctrl-D to exit) ..."
-    if helptext is not None:
-        banner += "\n" + helptext
-    try:
-        code.interact(banner=banner, local=namespace)
-    finally:
-        readline.write_history_file(history)
