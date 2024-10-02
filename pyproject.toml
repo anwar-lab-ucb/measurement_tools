@@ -1,0 +1,38 @@
+# [build-system]
+# requires = ["hatchling"] # build-time dependencies
+# build-backend = "hatchling.build"
+
+[project]
+name = 'measurement_tools'
+version = '1.0'
+
+dependencies = [
+             "numpy",
+             "pandas",
+             "matplotlib",   
+             "pyvisa",       
+             "pyvisa-py",
+             "tqdm",
+             "zeroconf",
+             "psutil",
+             "ThorlabsPM100",
+             "openpyxl",
+             "pyusb",
+             "pymeasure@git+https://github.com/AlecVercruysse/pymeasure.git",
+             "tekscope@git+https://github.com/anwar-lab-ucb/tekscope.git"
+]
+
+
+[project.scripts]
+laser_PIV = "measurement_tools.scripts.laser_PIV:main"
+laser_control = "measurement_tools.scripts.laser_control:main"
+pyvisa_list = "measurement_tools.scripts.pyvisa_list:main"
+agilent33500b_control = "measurement_tools.scripts.agilent33500b_control:main"
+tek_control = "measurement_tools.scripts.tek_control:main"
+tek_plot = "measurement_tools.scripts.tek_plot:main"
+
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
