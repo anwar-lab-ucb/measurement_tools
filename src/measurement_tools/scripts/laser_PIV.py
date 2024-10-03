@@ -4,7 +4,6 @@ import time
 import atexit
 import pdb
 
-import pyvisa
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
@@ -49,10 +48,9 @@ def bias_pulsed(fngen, current):
 
 
 def main(args):
-    rm = pyvisa.ResourceManager()
 
     # configure Power Meter
-    p = OpticalPowerMeter(rm)
+    p = OpticalPowerMeter()
     p.configure.scalar.power()
     p.sense.correction.wavelength = args.wavelength
     if not args.integration_mode:  # default
@@ -68,7 +66,7 @@ def main(args):
     if args.pulsed:
         duty = .5  # 0-1
         freq = 2e3
-        f = Agilent33500BFnGen(rm)
+        f = Agilent33500BFnGen()
         atexit.register(lambda: disable_fn_gen(f))
         f.channels[2].output = False
         f.channels[2].shape = 'SQU'
@@ -78,7 +76,7 @@ def main(args):
         f.channels[2].burst_mode = 'TRIG'            # non-gated
         f.channels[2].trigger_source = 'IMMEDIATE'   # internal trigger
     if args.integration_mode:
-        f = Agilent33500BFnGen(rm)
+        f = Agilent33500BFnGen()
         atexit.register(lambda: disable_fn_gen(f))
         f.channels[2].output = False
         f.channels[2].amplitude_unit = 'VPP'
@@ -97,7 +95,7 @@ def main(args):
 
     # optionally configure scope
     if args.integration_mode:
-        s = TekScope(rm)
+        s = TekScope()
         s.send_raw_command('*RST')  # reset scope'
         s.send_raw_command(':SELect:CH1 1')    # trig
         s.send_raw_command('CH1:SCALE 200E-3')  # 200mV/div (20mV = 1 mA)
@@ -114,7 +112,7 @@ def main(args):
         time.sleep(3)  # TODO this is just to make sure the scope has time to reset
 
     # configure Laser Driver
-    i = LaserDriver(rm, Io_max=args.Io_max, Vf_max=args.Vf_max)
+    i = LaserDriver(Io_max=args.Io_max, Vf_max=args.Vf_max)
     i.set_output_current(0)
     i.enable_output()
     time.sleep(0.5)  # wait to make sure there was no lockout

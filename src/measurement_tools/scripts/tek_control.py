@@ -9,7 +9,7 @@ from measurement_tools import interact, TekScope
 
 
 def run(args):
-    i = TekScope(None)
+    i = TekScope()
     if args.filename is not None:
         vs = []
         wfms = i.retrieve_all_waveforms()

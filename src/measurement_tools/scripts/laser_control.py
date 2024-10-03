@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
 import argparse
 
-import pyvisa
-
 from measurement_tools import interact, LaserDriver
 
 
 def run(args):
-    rm = pyvisa.ResourceManager()
-    i = LaserDriver(rm)
+    i = LaserDriver()
     if args.io_max is not None:
         print(f"Setting current limit to {args.io_max} mA")
         i.set_current_limit(args.io_max)

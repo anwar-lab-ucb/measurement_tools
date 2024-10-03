@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
 import argparse
 
-import pyvisa
-
 from measurement_tools import interact, Agilent33500BFnGen
 
 
 def run(args):
-    rm = pyvisa.ResourceManager()
-    i = Agilent33500BFnGen(rm)
+    i = Agilent33500BFnGen()
     ch = i.channels[args.channel]
     if args.enable and args.disable:
         raise ValueError('Cannot both disable and enable the channel at once.')
