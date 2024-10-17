@@ -20,7 +20,7 @@ def construct_network(channel):
     """
     freqs = channel.frequencies
     s_matrix = np.empty((freqs.size, 4), dtype=np.complex64)
-    channel.active_traces = 4
+    channel.visible_traces = 4
     for i, (tr, parameter) in enumerate(zip(
             channel.traces.values(),
             ['S11', 'S12', 'S21', 'S22'])):
