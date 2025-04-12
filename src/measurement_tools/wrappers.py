@@ -5,11 +5,13 @@ Alec Vercruysse
 Factory functins for instruments with 3rd-party python APIs.
 TODO refactor, decorators?
 """
+
 import pyvisa
 
 from measurement_tools import interact
 from ThorlabsPM100 import ThorlabsPM100
 from pymeasure.instruments.agilent import Agilent33500, AgilentE5062A
+from pymeasure.instruments.keysight import KeysightB2900A
 from tekscope import Oscilloscope, raw
 
 
@@ -23,13 +25,13 @@ def OpticalPowerMeter(name=None):
     rm: pyvisa context manager object.
     name: pyvisa resource name, or none
     """
-    print('Connecting to Thorlabs PM100D:')
+    print("Connecting to Thorlabs PM100D:")
     rm = pyvisa.ResourceManager()
     if name is None:
-        name = interact.get_pyvisa_instr_ID(rm, mytype='OpticalPowerMeter')
+        name = interact.get_pyvisa_instr_ID(rm, mytype="OpticalPowerMeter")
     inst = rm.open_resource(name)
     pm = ThorlabsPM100(inst=inst)
-    print(f'Successfully connected to {pm.system.sensor.idn}')
+    print(f"Successfully connected to {pm.system.sensor.idn}")
     return pm
 
 
@@ -43,12 +45,12 @@ def Agilent33500BFnGen(name=None, **kwargs):
     rm: pyvisa context manager object.
     name: pyvisa resource name, or none
     """
-    print('Connecting to Agilent 33500 Function Generator:')
+    print("Connecting to Agilent 33500 Function Generator:")
     rm = pyvisa.ResourceManager()
     if name is None:
-        name = interact.get_pyvisa_instr_ID(rm, mytype='Agilent33500')
+        name = interact.get_pyvisa_instr_ID(rm, mytype="Agilent33500")
     fngen = Agilent33500(name, **kwargs)
-    print(f'Successfully connected to {fngen.ask("*IDN?")}')
+    print(f"Successfully connected to {fngen.ask('*IDN?')}")
     return fngen
 
 
@@ -62,12 +64,12 @@ def AgilentE5062AVNA(name=None, **kwargs):
     rm: pyvisa context manager object.
     name: pyvisa resource name, or none
     """
-    print('Connecting to Agilent E5602A VNA:')
+    print("Connecting to Agilent E5602A VNA:")
     rm = pyvisa.ResourceManager()
     if name is None:
-        name = interact.get_pyvisa_instr_ID(rm, mytype='AgilentE5602A')
+        name = interact.get_pyvisa_instr_ID(rm, mytype="AgilentE5602A")
     vna = AgilentE5062A(name, **kwargs)
-    print(f'Successfully connected to {vna.ask("*IDN?")}')
+    print(f"Successfully connected to {vna.ask('*IDN?')}")
     return vna
 
 
@@ -80,9 +82,28 @@ def TekScope():
     need to connect with ethernet cable, and somehow have the scope
     automatically pick it's own IP address.
     """
-    print('Connecting to Tektronix Oscilloscope:')
+    print("Connecting to Tektronix Oscilloscope:")
     scope = Oscilloscope(host="169.254.8.194")
-    scope.send_raw_command('*IDN?')
-    resp = raw.query_ascii(scope.soc).decode('ascii')
+    scope.send_raw_command("*IDN?")
+    resp = raw.query_ascii(scope.soc).decode("ascii")
     print(f"Successfully connected to {resp}")
     return scope
+
+
+def PSMU(name=None, **kwargs):
+    """Factory function to return the KeysightB2900A class with similar
+    interactivity as other drivers.
+
+    Parameters:
+    ----------
+    rm: pyvisa context manager object.
+    name: pyvisa resource name, or none
+
+    """
+    print("Connecting to Keysight B2912A PSMU:")
+    rm = pyvisa.ResourceManager()
+    if name is None:
+        name = interact.get_pyvisa_instr_ID(rm, mytype="KeysightB2912A")
+    vna = KeysightB2900A(name, **kwargs)
+    print(f"Successfully connected to {vna.ask('*IDN?')}")
+    return vna

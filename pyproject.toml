@@ -18,7 +18,7 @@ dependencies = [
              "ThorlabsPM100",
              "openpyxl",
              "pyusb",
-             "pymeasure@git+https://github.com/pymeasure/pymeasure.git",
+             "pymeasure@git+https://github.com/AlecVercruysse/pymeasure.git",
              "tekscope@git+https://github.com/anwar-lab-ucb/tekscope.git"
 ]
 
