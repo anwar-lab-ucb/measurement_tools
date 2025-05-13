@@ -2,12 +2,12 @@ import logging
 import sys
 
 
-def create_logger(name=None, fname=None, quiet=False):
+def create_logger(name=None, fname=None, quiet=False, level=logging.DEBUG):
     """If `fname` is None, just prints to stdout"""
     if name == None:
         name = __name__
     logger = logging.getLogger(name)
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(level)
     formatter = logging.Formatter(
         "%(levelname)-8s %(name)s:%(filename)s:%(lineno)d (@ %(asctime)s) %(message)s"
     )
