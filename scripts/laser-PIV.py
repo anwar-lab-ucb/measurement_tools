@@ -27,6 +27,7 @@ def set_tint(f, tint_s):
     Used in integration mode only.
     """
     if tint_s > 0:
+        print(f.channels[2].pulse_period)
         duty_cycle = 100 * tint_s / f.channels[2].pulse_period
         f.channels[2].pulse_dutycycle = duty_cycle
         f.channels[2].output = True
@@ -52,7 +53,7 @@ def main(args):
     rm = pyvisa.ResourceManager()
 
     # configure Power Meter
-    p = OpticalPowerMeter(rm)
+    p = OpticalPowerMeter()
     p.configure.scalar.power()
     p.sense.correction.wavelength = args.wavelength
     if not args.integration_mode:  # default
@@ -68,7 +69,7 @@ def main(args):
     if args.pulsed:
         duty = .5  # 0-1
         freq = 2e3
-        f = Agilent33500BFnGen(rm)
+        f = Agilent33500BFnGen()
         atexit.register(lambda: disable_fn_gen(f))
         f.channels[2].output = False
         f.channels[2].shape = 'SQU'
@@ -78,7 +79,7 @@ def main(args):
         f.channels[2].burst_mode = 'TRIG'            # non-gated
         f.channels[2].trigger_source = 'IMMEDIATE'   # internal trigger
     if args.integration_mode:
-        f = Agilent33500BFnGen(rm)
+        f = Agilent33500BFnGen()
         atexit.register(lambda: disable_fn_gen(f))
         f.channels[2].output = False
         f.channels[2].amplitude_unit = 'VPP'
@@ -97,7 +98,7 @@ def main(args):
 
     # optionally configure scope
     if args.integration_mode:
-        s = TekScope(rm)
+        s = TekScope(host_id="169.254.8.189")
         s.send_raw_command('*RST')  # reset scope'
         s.send_raw_command(':SELect:CH1 1')    # trig
         s.send_raw_command('CH1:SCALE 200E-3')  # 200mV/div (20mV = 1 mA)
