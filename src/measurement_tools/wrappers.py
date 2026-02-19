@@ -73,7 +73,7 @@ def AgilentE5062AVNA(name=None, **kwargs):
     return vna
 
 
-def TekScope():
+def TekScope(host_id="169.254.8.194"):
     """
     Factory function to return the Oscilloscope class with similar
     interactivity as other drivers.
@@ -83,7 +83,7 @@ def TekScope():
     automatically pick it's own IP address.
     """
     print("Connecting to Tektronix Oscilloscope:")
-    scope = Oscilloscope(host="169.254.8.194")
+    scope = Oscilloscope(host=host_id)
     scope.send_raw_command("*IDN?")
     resp = raw.query_ascii(scope.soc).decode("ascii")
     print(f"Successfully connected to {resp}")
