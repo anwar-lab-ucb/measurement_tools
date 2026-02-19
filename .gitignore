@@ -4,3 +4,5 @@ requirements.txt
 build/
 repos/
 *.egg-info/
+.DS_Store
+.measurement_tools
